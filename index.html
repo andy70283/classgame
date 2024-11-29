@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" class="message">
+    <button type="button" class="go">送出</button>
+    <button type="button" class="del">刪除</button>
+    <div class="result"></div>
+    <script>
+        // message將輸入的文字存入json格式的localStorage
+        let message = document.querySelector('.message');
+        let go = document.querySelector('.go');
+        let result = document.querySelector('.result');
+        let del = document.querySelector('.del');
+        // messages是從json格式的localStorage取出的資料
+        // 需要經過JSON.parse轉換成物件
+        let messages = JSON.parse(localStorage.getItem('messages') || '[]');    
+        go.addEventListener('click', function(){
+            if(message.value == ''){
+            return
+            }
+            messages.push(message.value);
+            // setItem將資料存入localStorage
+            // json.stringify將物件轉換成json格式
+            localStorage.setItem('messages', JSON.stringify(messages));
+            result.innerHTML += `<div>${message.value}</div><hr>`;
+            message.value = '';
+        });
+        // 透過forEach顯示原來的資料
+        messages.forEach(function(x){
+            //result.innerHTML = result.innerHTML + `<div>${x}</div>`;
+            result.innerHTML += `<div>${x}</div><hr>`;
+        });
+        del.addEventListener('click', function(){
+            localStorage.removeItem('messages');
+            result.innerHTML = '';
+        });
+    </script>
+</body>
+</html>
